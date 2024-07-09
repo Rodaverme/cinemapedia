@@ -9,7 +9,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: const _HomeView());
+    return Scaffold(
+      body: const _HomeView(),
+      bottomNavigationBar: CustomButtonNavegation(),
+     
+    );
   }
 }
 
@@ -34,10 +38,7 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     final slide = ref.watch(movieSlideshowProvider);
 
     return Column(
-      children: [
-        const CustomAppbar(),
-        MoviesSlideShow(movies: slide)
-      ],
+      children: [const CustomAppbar(), MoviesSlideShow(movies: slide)],
     );
   }
 }
