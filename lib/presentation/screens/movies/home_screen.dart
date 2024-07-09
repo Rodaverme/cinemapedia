@@ -36,16 +36,23 @@ class _HomeViewState extends ConsumerState<_HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final initalLoading = ref.watch(initialLoadingProvider);
+    if (initalLoading) return FullScreenLoader();
+
+
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final popularMovies = ref.watch(popularMoviesProvider);
     final topRatedMovies = ref.watch(topRatedMoviesProvider);
     final upcomingMovies = ref.watch(upcomingMoviesProvider);
     final slide = ref.watch(movieSlideshowProvider);
 
+    
+
     return CustomScrollView(slivers: [
       const SliverAppBar(
         floating: true,
-        flexibleSpace: FlexibleSpaceBar(centerTitle: true,
+        flexibleSpace: FlexibleSpaceBar(
+          centerTitle: true,
           title: CustomAppbar(),
         ),
       ),
