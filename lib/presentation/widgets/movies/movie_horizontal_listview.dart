@@ -4,6 +4,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:cinemapedia/config/helpers/humans_formats.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MovieHorizontalListView extends StatefulWidget {
   final List<Movie> movies;
@@ -23,26 +24,23 @@ class MovieHorizontalListView extends StatefulWidget {
 }
 
 class _MovieHorizontalListViewState extends State<MovieHorizontalListView> {
-  
   final scrollControler = ScrollController();
 
   @override
   void initState() {
-  
     super.initState();
-   
+
     scrollControler.addListener(() {
-       if (widget.loadNextPage == null) return;
-  if((scrollControler.position.pixels + 200)>= scrollControler.position.maxScrollExtent){
-      print('Load next Movies');
-      widget.loadNextPage!();
-    }
+      if (widget.loadNextPage == null) return;
+      if ((scrollControler.position.pixels + 200) >=
+          scrollControler.position.maxScrollExtent) {
+        widget.loadNextPage!();
+      }
     });
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     scrollControler.dispose();
     super.dispose();
   }
@@ -107,7 +105,10 @@ class _Slide extends StatelessWidget {
                           child: CircularProgressIndicator(strokeWidth: 2)),
                     );
                   }
-                  return FadeIn(child: child);
+                  return GestureDetector(
+                    onTap: ()=> context.go('/movie/${movie.id}'),
+                    child:  FadeIn(child: child),
+                  );
                 },
               ),
             ),
