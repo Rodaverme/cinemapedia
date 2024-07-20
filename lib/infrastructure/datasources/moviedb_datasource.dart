@@ -52,10 +52,7 @@ class MoviedbDatasource extends MoviesDatasource {
     return _jsonToMovies(response.data);
   }
 
-
-
-
-  //OBTIENE PELICULA POR ID 
+  //OBTIENE PELICULA POR ID
   @override
   Future<Movie> getMovieById(String id) async {
     final response = await dio.get(
@@ -69,5 +66,12 @@ class MoviedbDatasource extends MoviesDatasource {
     final movie = MovieMapper.movieDetailsToEntity(movieDetails);
 
     return movie;
+  }
+
+  @override
+  Future<List<Movie>> searchMovies(String query) async {
+    final response =
+        await dio.get('/search/movie', queryParameters: {'query': query});
+    return _jsonToMovies(response.data);
   }
 }
