@@ -125,7 +125,7 @@ class BelongsToCollection {
     int id;
     String name;
     String posterPath;
-    String backdropPath;
+    String? backdropPath;
 
     BelongsToCollection({
         required this.id,
