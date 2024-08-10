@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:animate_do/animate_do.dart';
 import 'package:cinemapedia/domain/entities/actor.dart';
 import 'package:cinemapedia/presentation/providers/movies/movie_info_provider.dart';
@@ -52,7 +54,7 @@ class MovieScreenState extends ConsumerState<MovieScreen> {
 
 class _MovieDetails extends StatelessWidget {
   final Movie movie;
-  const _MovieDetails({super.key, required this.movie});
+  const _MovieDetails({required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +64,7 @@ class _MovieDetails extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -70,7 +72,7 @@ class _MovieDetails extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 child: Image.network(movie.posterPath, width: size.width * 0.3),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               SizedBox(
@@ -94,7 +96,7 @@ class _MovieDetails extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: Wrap(
             children: [
               ...movie.genreIds.map((gender) => Container(
@@ -109,7 +111,7 @@ class _MovieDetails extends StatelessWidget {
           ),
         ),
         _ActorByMovie(movieId: movie.id.toString()),
-        SizedBox(
+        const SizedBox(
           height: 50,
         )
       ],
@@ -140,7 +142,7 @@ class _ActorByMovie extends ConsumerWidget {
           final actor = actors[index];
 
           return Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             width: 135,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,7 +157,7 @@ class _ActorByMovie extends ConsumerWidget {
                         fit: BoxFit.cover,
                       )),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Text(
@@ -165,7 +167,7 @@ class _ActorByMovie extends ConsumerWidget {
                 Text(
                   actor.character ?? '',
                   maxLines: 2,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                   overflow: TextOverflow.ellipsis,
                 )
               ],
@@ -188,6 +190,12 @@ class _CustomSliverAppbar extends StatelessWidget {
       backgroundColor: Colors.black,
       expandedHeight: size.height * 0.7,
       foregroundColor: Colors.white,
+      actions: [
+        IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)
+            //icon:  Icon(Icons.favorite),color: Colors.red,
+
+            )
+      ],
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         background: Stack(children: [
@@ -201,28 +209,84 @@ class _CustomSliverAppbar extends StatelessWidget {
               },
             ),
           ),
-          const SizedBox.expand(
-            child: DecoratedBox(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        stops: [0.7, 1.0],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.black87]))),
-          ),
-          const SizedBox.expand(
-            child: DecoratedBox(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        stops: [0.0, 0.3],
-                        begin: Alignment.topLeft,
-                        colors: [
-                          Colors.black87,
-                          Colors.transparent,
-                        ]))),
-          )
+
+          const _CustomGradient(
+              end: Alignment.bottomCenter,
+              begin: Alignment.topCenter,
+              stops: [0.8, 1.0],
+              colors: [Colors.transparent, Colors.black54]),
+
+          const _CustomGradient(
+              begin: Alignment.topLeft,
+              stops: [0.0, 0.3],
+              colors: [Colors.black87, Colors.transparent]),
+
+          const _CustomGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              stops: [0.0, 0.2],
+              colors: [Colors.black54, Colors.transparent]),
+
+          // const SizedBox.expand(
+          //   child: DecoratedBox(
+          //       decoration: BoxDecoration(
+          //           gradient: LinearGradient(
+          //               stops: [0.7, 1.0],
+          //               begin: Alignment.topCenter,
+          //               end: Alignment.bottomCenter,
+          //               colors: [Colors.transparent, Colors.black87]))),
+          // ),
+          // const SizedBox.expand(
+          //   child: DecoratedBox(
+          //       decoration: BoxDecoration(
+          //           gradient: LinearGradient(
+          //               stops: [0.0, 0.3],
+          //               begin: Alignment.topLeft,
+          //               colors: [
+          //                 Colors.black87,
+          //                 Colors.transparent,
+          //               ]))),
+          // ),
+          // const SizedBox.expand(
+          //   child: DecoratedBox(
+          //       decoration: BoxDecoration(
+          //           gradient: LinearGradient(
+          //               stops: [0.0, 0.2],
+          //               begin: Alignment.topRight,
+          //               end: Alignment.bottomLeft,
+          //               colors: [
+          //                 Colors.black54,
+          //                 Colors.transparent,
+          //               ]))),
+          // )
         ]),
       ),
+    );
+  }
+}
+
+class _CustomGradient extends StatelessWidget {
+  final AlignmentGeometry begin;
+  final AlignmentGeometry? end;
+  final List<Color> colors;
+  final List<double> stops;
+
+  const _CustomGradient(
+      {required this.begin,
+      required this.stops,
+      this.end,
+      required this.colors});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.expand(
+      child: DecoratedBox(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  stops: stops,
+                  begin: begin,
+                  end: end ?? Alignment.center,
+                  colors: colors))),
     );
   }
 }
