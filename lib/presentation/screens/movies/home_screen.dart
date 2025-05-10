@@ -31,12 +31,19 @@ class _HomeViewState extends ConsumerState<_HomeView> {
   void initState() {
     super.initState();
     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
+    ref.read(popularMoviesProvider.notifier).loadNextPage();
+    ref.read(topRatedMoviesProvider.notifier).loadNextPage();
+    ref.read(upComingMoviesProvider.notifier).loadNextPage();
   }
 
   @override
   Widget build(BuildContext context) {
     final nowPlayingMovies = ref.watch(nowPlayingMoviesProvider);
     final slideShowMovies = ref.watch(moviesSlideshowProvider);
+    final popularMovies = ref.watch(popularMoviesProvider);
+    final topRatedMovies = ref.watch(topRatedMoviesProvider);
+    final upComingMovies = ref.watch(upComingMoviesProvider);
+    
     return CustomScrollView(
       slivers: [
         SliverAppBar(
@@ -65,33 +72,33 @@ class _HomeViewState extends ConsumerState<_HomeView> {
                               .loadNextPage(),
                 ),
                 MoviesHorizontalListview(
-                  movies: nowPlayingMovies,
+                  movies: upComingMovies,
                   title: 'Próximamente',
                   subtitle: 'MIÉRCOLES 15',
                   loadNextPage:
                       () =>
                           ref
-                              .read(nowPlayingMoviesProvider.notifier)
+                              .read(upComingMoviesProvider.notifier)
                               .loadNextPage(),
                 ),
                 MoviesHorizontalListview(
-                  movies: nowPlayingMovies,
+                  movies: popularMovies,
                   title: 'Más populares',
                   subtitle: 'VIERNES 17',
                   loadNextPage:
                       () =>
                           ref
-                              .read(nowPlayingMoviesProvider.notifier)
+                              .read(popularMoviesProvider.notifier)
                               .loadNextPage(),
                 ),
                 MoviesHorizontalListview(
-                  movies: nowPlayingMovies,
+                  movies: topRatedMovies,
                   title: 'Más valoradas',
                   subtitle: 'Desde Siempre',
                   loadNextPage:
                       () =>
                           ref
-                              .read(nowPlayingMoviesProvider.notifier)
+                              .read(topRatedMoviesProvider.notifier)
                               .loadNextPage(),
                 ),
                 SizedBox(height: 10),
