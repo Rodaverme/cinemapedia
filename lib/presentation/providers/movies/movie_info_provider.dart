@@ -2,15 +2,10 @@ import 'package:cinemapedia/presentation/providers/movies/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../domain/entities/movie.dart';
 
-final movieInfoProvider = StateNotifierProvider<MovieInfoProvider,Map<String,Movie>> ((ref) {
-  final movieRepository = ref.watch(movieRepositoryProvider);
-  return MovieInfoProvider(getMovie: movieRepository.getMovieById);
-});
-
-final nowPlayingMoviesProvider =
-    StateNotifierProvider<MoviesNotifier, List<Movie>>((ref) {
-      final fetchMovies = ref.watch(movieRepositoryProvider).getNowPlaying;
-      return MoviesNotifier(fetchMovies: fetchMovies);
+final movieInfoProvider =
+    StateNotifierProvider<MovieInfoProvider, Map<String, Movie>>((ref) {
+      final movieRepository = ref.watch(movieRepositoryProvider);
+      return MovieInfoProvider(getMovie: movieRepository.getMovieById);
     });
 
 typedef GetMovieCallback = Future<Movie> Function(String movieId);
