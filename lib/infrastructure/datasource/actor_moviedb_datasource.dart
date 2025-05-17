@@ -13,26 +13,19 @@ class ActorMoviedbDatasource extends ActorDatasource {
       queryParameters: {
         'api_key': Environment.theMovieDbKey,
         'language': 'es-MX',
-        'page': 1,
       },
     ),
   );
 
-  List<Actor> _jsonToActor(Map<String, dynamic> json) {
-    final creditsResponse = CreditsResponse.fromJson(json);
-
-    final List<Actor> actor =
-        creditsResponse.cast
-            .where((cast) => cast.profilePath != 'no-poster')
-            .map((moviedb) => ActorMapper.castToEntitiy(moviedb))
-            .toList();
-
-    return actor;
-  }
-
   @override
   Future<List<Actor>> getActorByMovie(String movieId) async {
-    final response = await dio.get('movie/$movieId/credits');
-    return _jsonToActor(response.data);
+    final response = await dio.get('/movie/$movieId/credits');
+    final castResponse = CreditsResponse.fromJson(response.data);
+
+    List<Actor> actors =
+        castResponse.cast
+            .map((cast) => ActorMapper.castToEntitiy(cast))
+            .toList();
+            return actors;
   }
 }

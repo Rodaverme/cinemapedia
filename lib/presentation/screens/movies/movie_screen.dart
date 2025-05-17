@@ -1,4 +1,6 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:cinemapedia/presentation/providers/movies/movie_info_provider.dart';
+import 'package:cinemapedia/presentation/providers/providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,6 +20,7 @@ class _MovieScreenState extends ConsumerState<MovieScreen> {
   void initState() {
     super.initState();
     ref.read(movieInfoProvider.notifier).loadMovie(widget.movieId);
+    ref.read(actorsByMovieProvider.notifier).loadActors(widget.movieId);
   }
 
   @override
@@ -70,7 +73,15 @@ class _CustomSliverAppbar extends StatelessWidget {
         background: Stack(
           children: [
             SizedBox.expand(
-              child: Image.network(movie.posterPath, fit: BoxFit.cover),
+              child: Image.network(
+                movie.posterPath,
+                fit: BoxFit.cover,
+
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress != null) return SizedBox();
+                  return FadeIn(child: child);
+                },
+              ),
             ),
 
             SizedBox.expand(
@@ -135,7 +146,6 @@ class _MovieDetails extends StatelessWidget {
                   children: [
                     Text(movie.title, style: textStyles.titleLarge),
                     Text(movie.overview),
-                    
                   ],
                 ),
               ),
@@ -149,8 +159,12 @@ class _MovieDetails extends StatelessWidget {
               ...movie.genreIds.map(
                 (gender) => Container(
                   margin: EdgeInsets.only(right: 10),
-                  child: Chip(label: Text(gender),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),),
+                  child: Chip(
+                    label: Text(gender),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
                 ),
               ),
             ],
