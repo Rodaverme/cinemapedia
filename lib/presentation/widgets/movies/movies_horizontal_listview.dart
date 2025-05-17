@@ -26,6 +26,7 @@ class MoviesHorizontalListview extends StatefulWidget {
 class _MoviesHorizontalListviewState extends State<MoviesHorizontalListview> {
   final scrollController = ScrollController();
 
+  @override
   initState() {
     super.initState();
     scrollController.addListener(() {

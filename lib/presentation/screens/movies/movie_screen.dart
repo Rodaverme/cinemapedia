@@ -212,7 +212,6 @@ class _ActorsByMovie extends ConsumerWidget {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 5),
 
                 Text(actor.name, maxLines: 2),
