@@ -60,6 +60,13 @@ class _CustomSliverAppbar extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return SliverAppBar(
+      actions: [
+        IconButton(
+          // icon: Icon(Icons.favorite_rounded,color: Colors.red,),
+          icon: Icon(Icons.favorite_border),
+          onPressed: () {},
+        ),
+      ],
       backgroundColor: Colors.black,
       expandedHeight: size.height * 0.7,
       foregroundColor: Colors.white,
@@ -78,25 +85,31 @@ class _CustomSliverAppbar extends StatelessWidget {
               ),
             ),
 
-            SizedBox.expand(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.transparent, Colors.black87],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [0.7, 1.0],
-                  ),
-                ),
-              ),
+            Gradient(
+              colors: [Colors.transparent, Colors.black54],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0.8, 1.0],
             ),
+            Gradient(
+              colors: [Colors.black54, Colors.transparent],
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              stops: [0.0, 0.3],
+            ),
+
+            Gradient(
+              colors: [Colors.black87, Colors.transparent],
+              begin: Alignment.topLeft,
+              stops: [0.0, 0.4],
+            ),
+
             SizedBox.expand(
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [Colors.black87, Colors.transparent],
                     begin: Alignment.topLeft,
-
                     stops: [0.0, 0.4],
                   ),
                 ),
@@ -105,6 +118,38 @@ class _CustomSliverAppbar extends StatelessWidget {
           ],
         ),
         titlePadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      ),
+    );
+  }
+}
+
+class Gradient extends StatelessWidget {
+  final List<Color> colors;
+  final AlignmentGeometry begin;
+  final AlignmentGeometry? end;
+  final List<double>? stops;
+
+  const Gradient({
+    super.key,
+    required this.colors,
+    required this.begin,
+    this.end,
+    this.stops,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.expand(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: colors,
+            begin: begin,
+            end: end ?? Alignment.bottomCenter,
+            stops: stops,
+            // stops: [0.7, 1.0],
+          ),
+        ),
       ),
     );
   }
