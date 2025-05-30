@@ -1,18 +1,22 @@
 import 'package:cinemapedia/domain/datasources/local_storege_datasource.dart';
 import 'package:cinemapedia/domain/entities/movie.dart';
 import 'package:isar/isar.dart';
+import 'package:path_provider/path_provider.dart'
+    show getApplicationDocumentsDirectory;
 
 class IsarDatasource extends LocalStorageDatasource {
   late Future<Isar> db;
+
   IsarDatasource() {
     db = openDB();
   }
 
   Future<Isar> openDB() async {
     if (Isar.instanceNames.isEmpty) {
+      final dir = await getApplicationDocumentsDirectory();
       return await Isar.open(
         [MovieSchema],
-        directory: Isar.defaultName,
+        directory: dir.path,
         inspector: true,
         // Permitir lectura en modo seguro
       );
@@ -36,16 +40,13 @@ class IsarDatasource extends LocalStorageDatasource {
         await isar.movies.filter().idEqualTo(movie.id).findFirst();
 
     if (isFavoriteMovie != null) {
-      // Si la película ya es favorita, eliminarla
-      await isar.writeTxnSync(() async {
-        isar.movies.deleteSync(isFavoriteMovie.isarId!);
-      });
-    } else {
-      // Si la película no es favorita, agregarla
-      await isar.writeTxnSync(() async {
-        isar.movies.putSync(movie);
-      });
+      // Borrar
+      isar.writeTxnSync(() => isar.movies.deleteSync(isFavoriteMovie.isarId!));
+      return;
     }
+
+    // Insertar
+    isar.writeTxnSync(() => isar.movies.putSync(movie));
   }
 
   @override
